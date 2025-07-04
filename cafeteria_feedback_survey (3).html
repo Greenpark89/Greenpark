@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cafeteria Feedback Survey - Greenpark Bengaluru</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        form {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        select, textarea, input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #34495e;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Cafeteria Feedback Survey</h1>
+<p><strong>Location:</strong> Greenpark Bengaluru</p>
+<p><em>Note: This form does not automatically collect your name or email address unless you choose to provide them.</em></p>
+
+<!-- FormSubmit integration for email notifications -->
+<!-- Replace 'itmgr.blr@hotelgreenpark.com' with your email if needed -->
+<form action="https://formsubmit.co/itmgr.blr@hotelgreenpark.com" method="POST" id="feedbackForm">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="https://thankyou-page.com">
+
+    <label for="menuTaste">1. Menu and Taste</label>
+    <select name="Menu and Taste" id="menuTaste" required>
+        <option value="">Select</option>
+        <option>Excellent</option>
+        <option>Good</option>
+        <option>Average</option>
+        <option>Poor</option>
+    </select>
+
+    <label for="hygiene">2. Hygiene</label>
+    <select name="Hygiene" id="hygiene" required>
+        <option value="">Select</option>
+        <option>Excellent</option>
+        <option>Good</option>
+        <option>Average</option>
+        <option>Poor</option>
+    </select>
+
+    <label for="services">3. Cafeteria Services</label>
+    <select name="Cafeteria Services" id="services" required>
+        <option value="">Select</option>
+        <option>Excellent</option>
+        <option>Good</option>
+        <option>Average</option>
+        <option>Poor</option>
+    </select>
+
+    <label for="rating">4. Overall Rating Of Cafeteria Facility</label>
+    <select name="Overall Rating" id="rating" required>
+        <option value="">Select</option>
+        <option>⭐⭐⭐⭐⭐</option>
+        <option>⭐⭐⭐⭐</option>
+        <option>⭐⭐⭐</option>
+        <option>⭐⭐</option>
+        <option>⭐</option>
+    </select>
+
+    <label for="suggestion">5. Suggestions</label>
+    <textarea name="Suggestions" id="suggestion" rows="4" placeholder="Your suggestions here..."></textarea>
+
+    <button type="submit">Submit Feedback</button>
+</form>
+
+<script>
+// Microsoft Teams webhook integration
+// Replace the URL below with your actual Teams webhook URL
+const webhookUrl = "https://your-teams-webhook-url";
+
+document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const feedback = {};
+    formData.forEach((value, key) => {
+        feedback[key] = value;
+    });
+
+    // Send to Microsoft Teams
+    fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            text: `New Cafeteria Feedback Received:
+
+Menu and Taste: ${feedback["Menu and Taste"]}
+
+Hygiene: ${feedback["Hygiene"]}
+
+Cafeteria Services: ${feedback["Cafeteria Services"]}
+
+Overall Rating: ${feedback["Overall Rating"]}
+
+Suggestions: ${feedback["Suggestions"]}`
+        })
+    }).catch(error => console.error("Teams webhook error:", error));
+
+    // Submit to FormSubmit
+    this.submit();
+});
+</script>
+
+</body>
+</html>
